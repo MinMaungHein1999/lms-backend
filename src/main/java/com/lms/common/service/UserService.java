@@ -1,7 +1,9 @@
 package com.lms.common.service;
 
 import com.lms.common.model.User;
+import com.lms.common.model.UserRole;
 import com.lms.common.repository.UserRepository;
+import com.lms.common.repository.UserRoleRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +13,13 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    private final UserRoleRespository userRoleRespository;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserRoleRespository userRoleRespository) {
         this.userRepository = userRepository;
+        this.userRoleRespository = userRoleRespository;
     }
 
     public User create(User user){
@@ -26,7 +30,15 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User update(int id, User user){
+    public User update(Long id, User upateUser){
+        User user = this.userRepository.findById(id).orElseThrow();
+        UserRole userRole = this.userRoleRespository.findById(upateUser.getUserRole().getId()).orElseThrow();
+
+        user.setEmail(upateUser.getEmail());
+        user.setUsername(upateUser.getUsername());
+        user.setAddress(upateUser.getAddress());
+        user.setUserRole(userRole);
+
         return this.userRepository.save(user);
     }
 

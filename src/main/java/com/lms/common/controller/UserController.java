@@ -37,6 +37,11 @@ public class UserController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateById(@RequestBody User user, @PathVariable Long id){
+        return ResponseEntity.ok(userService.update(id, user));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> destory(@PathVariable Long id) {
         try {

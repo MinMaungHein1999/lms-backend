@@ -1,5 +1,6 @@
 package com.lms.common.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,14 +13,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column
     private String address;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id") // FK key column
+    @JsonIgnore
+    private UserRole userRole;
 
 
 }
