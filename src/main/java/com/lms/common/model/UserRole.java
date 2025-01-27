@@ -1,5 +1,6 @@
 package com.lms.common.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public class UserRole {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "userRole")
+    @OneToMany(mappedBy = "userRole", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 }

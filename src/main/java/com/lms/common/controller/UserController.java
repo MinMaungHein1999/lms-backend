@@ -1,5 +1,6 @@
 package com.lms.common.controller;
 
+import com.lms.common.dto.UserDto;
 import com.lms.common.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        List<UserDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
