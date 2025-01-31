@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public class UserRoleService {
 
-    private UserRoleRespository userRoleRespository;
+    private final UserRoleRespository userRoleRespository;
 
     @Autowired
     public UserRoleService(UserRoleRespository userRoleRespository){

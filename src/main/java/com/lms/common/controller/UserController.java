@@ -1,5 +1,6 @@
 package com.lms.common.controller;
 
+import com.lms.common.dto.PaginationDto;
 import com.lms.common.dto.UserDto;
 import com.lms.common.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,10 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers(){
-        List<UserDto> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<PaginationDto<UserDto>> getAllUsers(@RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
+                                                     @RequestParam(value = "pageSize", defaultValue = "5") int pageSize){
+        PaginationDto<UserDto> paginationDto = userService.getPaginatedUsers(currentPage, pageSize);
+        return ResponseEntity.ok(paginationDto);
     }
 
     @GetMapping("/{id}")

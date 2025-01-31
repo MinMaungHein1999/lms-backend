@@ -1,5 +1,6 @@
 package com.lms.common.service;
 
+import com.lms.common.dto.PaginationDto;
 import com.lms.common.dto.UserDto;
 import com.lms.common.dto.UserRoleDto;
 import com.lms.common.mapper.RoleMapper;
@@ -9,6 +10,8 @@ import com.lms.common.model.UserRole;
 import com.lms.common.repository.UserRepository;
 import com.lms.common.repository.UserRoleRespository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,8 +47,10 @@ public class UserService {
     public List<UserDto> getAllUsers(){
         return userRepository.findAll().stream().map(user -> {
             UserDto userDto = this.userMapper.toDto(user);
-            UserRoleDto userRoleDto = this.roleMapper.toDto(user.getUserRole());
-            userDto.setUserRole(userRoleDto);
+            if(user.getUserRole() != null) {
+                UserRoleDto userRoleDto = this.roleMapper.toDto(user.getUserRole());
+                userDto.setUserRole(userRoleDto);
+            }
             return userDto;
         }).collect(Collectors.toList());
     }
@@ -68,5 +73,15 @@ public class UserService {
 
     public void delete(User user){
         userRepository.delete(user);
+    }
+
+    public PaginationDto<UserDto> getPaginatedUsers(int currentPage, int pageSize) {
+        long totalUsersCount = userRepository.count();
+        long numberOfPages = totalUsersCount / pageSize;
+        Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
+        List<UserDto> userList = userRepository.findUsersWithPagination(pageable).stream().map(userMapper::toDto).collect(Collectors.toList());
+        PaginationDto<UserDto> paginationDto = new PaginationDto<>(userList, numberOfPages);
+        return paginationDto;
+
     }
 }
