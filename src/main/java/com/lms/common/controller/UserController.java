@@ -23,9 +23,11 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<PaginationDto<UserDto>> getAllUsers(@RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
-                                                     @RequestParam(value = "pageSize", defaultValue = "5") int pageSize){
-        PaginationDto<UserDto> paginationDto = userService.getPaginatedUsers(currentPage, pageSize);
+    public ResponseEntity<PaginationDto<UserDto>> getAllUsers(
+                                                        @RequestParam(value = "username") String username,
+                                                        @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
+                                                        @RequestParam(value = "pageSize", defaultValue = "5") int pageSize){
+        PaginationDto<UserDto> paginationDto = userService.getPaginatedUsers(username ,currentPage, pageSize);
         return ResponseEntity.ok(paginationDto);
     }
 

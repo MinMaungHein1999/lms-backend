@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,12 +74,21 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public PaginationDto<UserDto> getPaginatedUsers(int currentPage, int pageSize) {
-        long totalUsersCount = userRepository.count();
-        long numberOfPages = totalUsersCount / pageSize;
+    public PaginationDto<UserDto> getPaginatedUsers(String username, int currentPage, int pageSize) {
+        long totalUsersCount = 0;
+
         Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
-        List<UserDto> userList = userRepository.findUsersWithPagination(pageable).stream().map(userMapper::toDto).collect(Collectors.toList());
-        PaginationDto<UserDto> paginationDto = new PaginationDto<>(userList, numberOfPages);
+        List<User> userList = null;
+        if(username !=null && !username.trim().isEmpty()){
+            userList = userRepository.findByUserNameWithPage(username, pageable);
+            totalUsersCount = userRepository.findByUserName(username).size();
+        }else{
+            userList = userRepository.findUsersWithPagination(pageable);
+            totalUsersCount = userRepository.count();
+        }
+        long numberOfPages = totalUsersCount / pageSize;
+        List<UserDto> userDtoList = userList.stream().map(userMapper::toDto).collect(Collectors.toList());
+        PaginationDto<UserDto> paginationDto = new PaginationDto<>(userDtoList, numberOfPages, numberOfPages > currentPage);
         return paginationDto;
 
     }
