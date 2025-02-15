@@ -13,4 +13,5 @@ public class PaginationDto<T>{
     private List<T> data;
     private long numberOfPages;
     private boolean hasNextPage;
+    private long totalRecords;
 }

@@ -88,7 +88,7 @@ public class UserService {
         }
         long numberOfPages = totalUsersCount / pageSize;
         List<UserDto> userDtoList = userList.stream().map(userMapper::toDto).collect(Collectors.toList());
-        PaginationDto<UserDto> paginationDto = new PaginationDto<>(userDtoList, numberOfPages, numberOfPages > currentPage);
+        PaginationDto<UserDto> paginationDto = new PaginationDto<>(userDtoList, numberOfPages, numberOfPages > currentPage, totalUsersCount);
         return paginationDto;
 
     }

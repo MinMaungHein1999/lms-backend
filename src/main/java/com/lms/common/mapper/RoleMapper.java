@@ -12,6 +12,5 @@ public class RoleMapper {
       userRoleDto.setName(userRole.getName());
       userRoleDto.setDescription(userRole.getDescription());
       return userRoleDto;
-
   }
 }
